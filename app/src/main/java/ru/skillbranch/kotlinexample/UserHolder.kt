@@ -19,6 +19,7 @@ object UserHolder {
 
     fun registerUserByPhone(fullName: String, rawPhone:String):User{
         //TODO
+
     }
 
     fun loginUser(login: String, password: String): String? {
