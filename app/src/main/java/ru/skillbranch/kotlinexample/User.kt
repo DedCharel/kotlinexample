@@ -15,14 +15,16 @@ class User private constructor(
     meta : Map<String,Any>? = null
 ) {
     val userInfo : String
+
     private val fullName : String
     get()  = listOfNotNull(firstName, lastName)
-        .joinToString { " " }
+        .joinToString (" ")
         .capitalize()
+
     private val initials: String
     get() = listOfNotNull(firstName, lastName)
         .map{it.first().toUpperCase()}
-        .joinToString { " " }
+        .joinToString (" ")
     private var phone:String? = null
     set(value){
         field = value?.replace("[^+\\d]".toRegex(),"")
@@ -30,7 +32,7 @@ class User private constructor(
     private var _login:String? = null
      var login:String
         set(value){
-            _login = value?.toLowerCase()
+            _login = value.toLowerCase()
         }
         get() = _login!!
     private val salt: String by lazy {
@@ -71,7 +73,7 @@ class User private constructor(
     init {
         println("First init block, primary constructor was called")
 
-        check(!firstName.isBlank()){"FirstName must be not blank"}
+        check(firstName.isNotBlank()){"FirstName must be not blank"}
         check(email.isNullOrBlank() || rawPhone.isNullOrBlank()){"Email or phone must be not blank"}
 
         phone = rawPhone
@@ -117,6 +119,13 @@ class User private constructor(
         }.toString()
     }
 
+    fun changeAccessCode(){
+        val code = generateAccessCode()
+        passwordHash = encrypt(code)
+        accessCode = code
+       // sendAccessCodeToUser(rawPhone, code)
+    }
+
     private fun sendAccessCodeToUser(phone: String, code: String) {
     println(".......sending access code $code on $phone")
     }
@@ -125,7 +134,7 @@ class User private constructor(
     companion object Factory{
         fun makeUser(
             fullName:String,
-            email:String,
+            email:String? = null,
             password: String? = null,
             phone: String? = null
         ):User{
@@ -139,7 +148,7 @@ class User private constructor(
 
         private fun String.fullNameToPair(): Pair<String, String?>{
             return this.split(" ")
-                .filter { it.isNullOrBlank() }
+                .filter { it.isNotBlank()}
                 .run {
                     when(size){
                         1 -> first() to null
