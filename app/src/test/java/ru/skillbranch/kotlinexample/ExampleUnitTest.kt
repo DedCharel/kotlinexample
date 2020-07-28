@@ -187,13 +187,11 @@ class ExampleUnitTest {
         Assert.assertEquals(expectedInfo, successResult)
     }
 
-//    @Test
-//    fun drop_last_while(){
-//        val list = listOf<Int>(1,2,3,4,5,6,7)
-//        val result = list.dropLastUntil { it == 5 }
-//        print(result)
-//        val list2 = listOf("aaa", "bbb", "ccc", "ddd")
-//        val result2 =list2.dropLastUntil { it =="ddd" }
-//        println(result2)
-//    }
+    @Test
+    fun drop_last_while(){
+        val list = listOf<Int>(1,2,3,4,5,6,7)
+        val result = list.dropLastUntil { it == 5 }
+        val expectResult = listOf(1,2,3,4)
+        Assert.assertEquals(expectResult, result)
+    }
 }

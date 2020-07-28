@@ -1,6 +1,7 @@
 package ru.skillbranch.kotlinexample
 
 import androidx.annotation.VisibleForTesting
+import kotlin.math.log
 
 object UserHolder {
     private val map = mutableMapOf<String, User>()
@@ -48,6 +49,15 @@ object UserHolder {
     fun requestAccessCode(login:String):Unit{
         val user = map[login.trim()] ?: map[login.replace("[^+\\d]".toRegex(),"")]
         user?.changeAccessCode()
+    }
+
+    fun importUsers(list: List<String>) :List<User> {
+        return list.map {
+            User.parseCSV(it).also { user ->
+                map[user.login] = user
+            }
+        }
+
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
